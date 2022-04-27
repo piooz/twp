@@ -5,6 +5,7 @@ using Data;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace Logic
 {
     public abstract class LogicApi
@@ -14,7 +15,12 @@ namespace Logic
         {
             return new BusinessLogic(data == null ? DataApi.Create() : data);
         }
-        
+
+        public abstract List<Ball> BallCollenction();
+        public abstract int BallCount();
+        public abstract int BoardSize();
+
+
         public abstract void StartMovingBalls();
         public abstract void StopMovingBalls();
 
@@ -52,6 +58,19 @@ namespace Logic
             public override void StopMovingBalls()
             {
                 this.running = false;
+            }
+
+            override public List<Ball> BallCollenction()
+            {
+                return map.Balls;
+            }
+            override public  int BallCount()
+            {
+                return map.Balls.Count;
+            }
+            override public  int BoardSize()
+            {
+                return map.Size;
             }
 
         }
