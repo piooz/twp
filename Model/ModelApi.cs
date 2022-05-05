@@ -46,7 +46,6 @@ namespace Model
                 logic.StopMovingBalls();
             }
 
-
             override public int getBoardSize()
             {
                 return logic.BoardSize();

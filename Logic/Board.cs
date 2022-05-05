@@ -42,8 +42,8 @@ namespace Logic
                 int x = rand.Next(r, this.Size - r);
                 int y = rand.Next(r, this.Size - r);
 
-                int vx = rand.Next(1, 5);
-                int vy = rand.Next(1, 5);
+                int vx = rand.Next(1, 15);
+                int vy = rand.Next(1, 15);
                 Ball Bally = new Ball(x, y, r, vx, vy);
                 Balls.Add(new Ball(x, y, r, vx, vy));
 

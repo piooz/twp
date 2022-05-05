@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mw="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
     <Window.DataContext>
         <mw:MainViewModel/>
     </Window.DataContext>
@@ -13,21 +13,28 @@
         <TextBox Name="kulki" Text="{Binding InputNum}" Width="150" BorderBrush="Black" BorderThickness="2"/>
         <Button x:Name="baton"  Command="{Binding StartButtonClick}" Content="START" Width="100"/>
 
-        <Canvas>
-            <Grid x:Name="board" Height="300" Width="300" Margin="250,10,250,10" >
+        <Canvas x:Name="board" Height="300" Width="300" Margin="250,10,250,10">
 
-                <Border BorderBrush="Black" Background="White" BorderThickness="2">
-                    <ItemsControl ItemsSource="{Binding Balls}" RenderTransformOrigin="0.496,0.706">
+            <Rectangle Stroke="Black" Height="300" Width="300"/>
+            <ItemsControl ItemsSource="{Binding Balls}">
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Ellipse Width= "20" Height="20" Fill="Tomato" />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Ellipse Width= "10" Height="10" Fill="Tomato">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform X="{Binding Posx}" Y="{Binding Posy}"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </DataTemplate>
 
-                    </ItemsControl>
-                </Border>
-            </Grid>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding Posx}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Posy}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
 
         </Canvas>
     </StackPanel>

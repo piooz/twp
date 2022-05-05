@@ -51,8 +51,7 @@ namespace ViewModel
         }
         private ModelApi ModelLayer;
         private string number;
-        public ObservableCollection<ElipseModel> Balls;
+        public ObservableCollection<ElipseModel> Balls { get; set; }
     }
-
 
 }
