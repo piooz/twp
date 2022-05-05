@@ -2,38 +2,20 @@
 using Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Logic;
 
 namespace ViewModel
 {
-    //public abstract class ViewModelApi // : INotifyPropertyChanged
-    //{
-    //    public static ViewModelApi CreateLayer(ModelApi Mapi = default(ModelApi))
-    //    {
-    //        return new ViewModel(Mapi == null ? ModelApi.CreateLayer() : Mapi);
-    //    }
-
-    //    // implementacja Api
-    //    private class ViewModel : ViewModelApi
-    //    {
-    //        private readonly ModelApi model;
-
-    //        public ViewModel(ModelApi MApi)
-    //        {
-    //            model = MApi;
-    //        }
-    //    }
-    //}
     public class MainViewModel : ViewModelBase
     {
         //public ICommand ExiStopButtonClick { get; set; }
         public ICommand StartButtonClick { get; set; }
+
         public MainViewModel() : this(ModelApi.CreateLayer()) { }
         public MainViewModel(ModelApi modelAbstractApi)
         {
             ModelLayer = modelAbstractApi;
             StartButtonClick = new RelayCommand(() => ClickHandler());
-            Balls = new ObservableCollection<Ball>();
+            Balls = modelAbstractApi.GetModels();
         }
 
         //liczba kulek
@@ -69,11 +51,8 @@ namespace ViewModel
         }
         private ModelApi ModelLayer;
         private string number;
-        public ObservableCollection<Ball> Balls;
-
+        public ObservableCollection<ElipseModel> Balls;
     }
-
-
 
 
 }

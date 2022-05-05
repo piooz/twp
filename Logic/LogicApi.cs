@@ -18,12 +18,10 @@ namespace Logic
         public abstract List<Ball> BallCollection();
         public abstract int BallCount();
         public abstract int BoardSize();
-
-
         public abstract void StartMovingBalls();
         public abstract void StopMovingBalls();
 
-       public abstract void AddBalls(int count);
+       public abstract Ball AddBall();
 
         private class BusinessLogic : logic
         {
@@ -72,9 +70,9 @@ namespace Logic
             {
                 return map.Size;
             }
-            public override void AddBalls(int count)
+            public override Ball AddBall()
             {
-                map.AddRandomBalls(count);
+                return map.AddRandomBall();
             }
         }
 

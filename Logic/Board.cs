@@ -33,6 +33,22 @@ namespace Logic
                 Balls.Add( new Ball(x, y, r, vx, vy) );
             }
         }
+        public Ball AddRandomBall()
+        {
+            Random rand = new Random();
+
+
+                int r = 5;
+                int x = rand.Next(r, this.Size - r);
+                int y = rand.Next(r, this.Size - r);
+
+                int vx = rand.Next(1, 5);
+                int vy = rand.Next(1, 5);
+                Ball Bally = new Ball(x, y, r, vx, vy);
+                Balls.Add(new Ball(x, y, r, vx, vy));
+
+            return Bally;
+        }
 
         public void MoveBalls()
         {

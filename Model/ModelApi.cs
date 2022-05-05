@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Logic;
 
 namespace Model
@@ -11,19 +12,25 @@ namespace Model
         {
             return new Model(Lapi == null ? logic.CreateLayer() : Lapi);
         }
-        
+
+        public abstract ObservableCollection<ElipseModel> GetModels();
+
         public abstract void StartMoving();
         public abstract void StopMoving();
 
         //public abstract void Start();
-        public abstract List<Ball> getBalls();
         public abstract int getBoardSize();
         public abstract void addBalls(int count);
 
         // implementacja Api
         private class Model : ModelApi
         {
+            private ObservableCollection<ElipseModel> Elipses = new ObservableCollection<ElipseModel>();
 
+            public override ObservableCollection<ElipseModel> GetModels()
+            {
+                return Elipses;
+            }
             public Model(logic logika)
             {
                 logic = logika;
@@ -39,10 +46,7 @@ namespace Model
                 logic.StopMovingBalls();
             }
 
-            override public List<Ball> getBalls()
-            {
-                return logic.BallCollection();
-            }
+
             override public int getBoardSize()
             {
                 return logic.BoardSize();
@@ -50,11 +54,14 @@ namespace Model
 
             public override void addBalls(int count)
             {
-                logic.AddBalls(count);
-                
+                for( int i = 0; i< count; i++ )
+                {
+                    logic.AddBall();
+                    Elipses.Add(new ElipseModel(logic.AddBall()));
+
+                }
+
             }
-
-
 
         }
     }

@@ -9,27 +9,27 @@
     <Window.DataContext>
         <mw:MainViewModel/>
     </Window.DataContext>
-    <Grid RenderTransformOrigin="0.5,0.5">
-        <TextBox Name="kulki" Text="{Binding InputNum}" Width="150" Margin="150,15,496,395" Height="25" BorderBrush="Black" BorderThickness="2"/>
-        <Button x:Name="baton"  Command="{Binding StartButtonClick}" Content="START" Width="50" Margin="300,10,300,390" Height="25"/>
+    <StackPanel>
+        <TextBox Name="kulki" Text="{Binding InputNum}" Width="150" BorderBrush="Black" BorderThickness="2"/>
+        <Button x:Name="baton"  Command="{Binding StartButtonClick}" Content="START" Width="100"/>
 
         <Canvas>
-            <Grid x:Name="board" Height="300" Width="300" Margin="250,80,250,67" >
+            <Grid x:Name="board" Height="300" Width="300" Margin="250,10,250,10" >
 
-            <Border BorderBrush="Black" Background="White" BorderThickness="2">
-                    <ItemsControl ItemsSource="{Binding Balls}">
+                <Border BorderBrush="Black" Background="White" BorderThickness="2">
+                    <ItemsControl ItemsSource="{Binding Balls}" RenderTransformOrigin="0.496,0.706">
 
                         <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Ellipse Width= "20" Height="20" Fill="Tomato" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Ellipse Width= "20" Height="20" Fill="Tomato" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
 
-                </ItemsControl>
-            </Border>
-        </Grid>
-        
+                    </ItemsControl>
+                </Border>
+            </Grid>
+
         </Canvas>
-    </Grid>
+    </StackPanel>
 
 </Window>
