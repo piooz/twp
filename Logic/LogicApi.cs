@@ -3,77 +3,138 @@ using System.Collections.Generic;
 using Data;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.ComponentModel;
 
 namespace Logic
 {
     public abstract class logic
     {
         
-        public static logic CreateLayer(DataApi data = default(DataApi))
+        public static logic CreateLayer(DataApi data = default)
         {
-            return new BusinessLogic(data == null ? DataApi.Create() : data);
+            return new BusinessLogic(data ?? DataApi.Create());
         }
 
-        public abstract List<Ball> BallCollection();
-        public abstract int BallCount();
-        public abstract int BoardSize();
-        public abstract void StartMovingBalls();
-        public abstract void StopMovingBalls();
 
-       public abstract Ball AddBall();
+        public abstract void CreateBoard(int height, int width, int numberOfBalls, int radiusOfBalls);
+        public abstract void StartMovingBalls();
+        public abstract void DestroyThreads();
+        public abstract List<BallConnector> GetBalls();
+
+        private List<BallConnector> ballOperators;
 
         private class BusinessLogic : logic
         {
-            public  Task positionUpdater { get; private set; }
-            public Board map = new Board(300);
-            private readonly DataApi DataLayer;
-            private bool running;
-
-
-            public BusinessLogic(DataApi dataLayerAPI)
+            internal BusinessLogic(DataApi data)
             {
-                DataLayer = dataLayerAPI;
+                DataLayer = data;
             }
-
-            public override void StartMovingBalls()
+            public override void CreateBoard(int height, int width, int numberOfBalls, int radiusOfBalls)
             {
-                this.running = true;
-                positionUpdater = new Task(MoveBallsInLoop);
-                positionUpdater.Start();
-            }
+                ballOperators = new List<BallConnector>();
+                DataLayer.CreateBoard(height, width, numberOfBalls, radiusOfBalls);
 
-
-            private void MoveBallsInLoop()
-            {
-                while (this.running)
+                foreach (Ball bal in DataLayer.GetBalls())
                 {
-                    map.MoveBalls();
-                    Thread.Sleep(10);
+                    ballOperators.Add(new BallConnector(bal));
+                    bal.PropertyChanged += CheckMovement;
+                }
+
+            }
+
+            public void CheckMovement(object sender, PropertyChangedEventArgs e)
+            {
+                Ball b = (Ball)sender;
+                if (e.PropertyName == "Position")
+                {
+                    UpdateVelocity(DataLayer.GetBoard().Height, DataLayer.GetBoard().Width, b.R, b);
+                }
+
+            }
+
+            private void UpdateVelocity(int boardHeight, int boardWidth, double radius, Ball ball)
+            {
+                BounceFromBoundaries(ball, DataLayer.GetBoard());
+                Ball collided = CheckCollisions(ball);
+                if (collided != null)
+                {
+                    double newX1, newX2, newY1, newY2;
+
+                    newX1 = (ball.VelX * (ball.mass - collided.mass) / (ball.mass + collided.mass) + (2 * collided.mass * collided.VelX) / (ball.mass + collided.mass));
+                    newY1 = (ball.VelY * (ball.mass - collided.mass) / (ball.mass + collided.mass) + (2 * collided.mass* collided.VelY) / (ball.mass + collided.mass));
+
+                    newX2 = (collided.VelX * (collided.mass - ball.mass) / (ball.mass + collided.mass) + (2 * ball.mass * ball.VelX) / (ball.mass + collided.mass));
+                    newY2 = (collided.VelY * (collided.mass - ball.mass) / (ball.mass + collided.mass) + (2 * ball.mass * ball.VelY) / (ball.mass + collided.mass));
+
+                    ball.VelX = newX1;
+                    ball.VelY = newY1;
+
+                    collided.VelX = newX2;
+                    collided.VelY = newY2;
+
+                }
+
+            }
+
+            private void BounceFromBoundaries(Ball ball, Board board)
+            {
+                if (!(ball.X >= ball.R && ball.X <= board.Width - ball.R))
+                {
+                    if (ball.VelX > 0)
+                        ball.X = board.Width - ball.R;
+                    else
+                        ball.X = ball.R;
+
+                    ball.VelX *= -1;
+                }
+
+
+                if (!(ball.Y >= ball.R && ball.Y <= board.Height - ball.R))
+                {
+                    if (ball.VelY > 0)
+                        ball.Y = board.Height - ball.R;
+                    else
+                        ball.Y = ball.R;
+
+                    ball.VelY *= -1;
                 }
             }
 
-            public override void StopMovingBalls()
+            private Ball CheckCollisions(Ball ball)
             {
-                this.running = false;
+                foreach (Ball other in DataLayer.GetBalls())
+                {
+                    if (other == ball)
+                        continue;
+
+                    double distance = Math.Sqrt((ball.X - other.X) * (ball.X - other.X) +
+                                                (ball.Y - other.Y) * (ball.Y - other.Y));
+
+                    if (distance <= ball.R + other.R)
+                        return other;
+                }
+
+                return null;
+
             }
 
-            override public List<Ball> BallCollection()
+
+            public override void StartMovingBalls()
             {
-                return map.Balls;
+                DataLayer.SimulateMoving();
             }
-            override public  int BallCount()
+
+            public override void DestroyThreads()
             {
-                return map.Balls.Count;
+                DataLayer.StopMoving();
             }
-            override public  int BoardSize()
+
+            public override List<BallConnector> GetBalls()
             {
-                return map.Size;
+                return ballOperators;
             }
-            public override Ball AddBall()
-            {
-                return map.AddRandomBall();
-            }
+
+            private readonly DataApi DataLayer;
         }
 
     }

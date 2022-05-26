@@ -12,7 +12,8 @@ namespace Data
                 return new DataLayer();
             }
 
-        public abstract void CreateBoard(int size, int ballsAmount, int radius);
+        public abstract void CreateBoard(int height, int width, int ballsAmount, int radius);
+        public abstract bool CanCreateBallHere(double x, double y, double radius);
 
         public abstract void AddBall(double x, double y, double radius, double mass);
 
@@ -24,20 +25,27 @@ namespace Data
 
         public abstract List<Ball> GetBalls();
 
-        public abstract bool CanCreateBallHere(double x, double y, double radius);
+
+
+
+
         internal class DataLayer : DataApi
         {
+            internal DataLayer()
+            {
+
+            }
             private List<Thread> threads;
 
             private Board board;
 
-            private bool moving;
+            private bool moving = false;
 
             private object _lock = new object();
 
-            public override void CreateBoard(int size, int ballsAmount, int radius )
+            public override void CreateBoard(int height, int width, int ballsAmount, int radius )
             {
-                board = new Board(size);
+                board = new Board(height, width);
 
                 threads = new List<Thread>();
 
@@ -50,8 +58,8 @@ namespace Data
                     double mass = 5;
                     do
                     {
-                        x = rand.NextDouble() * (size - 2 - 2 * radius) + radius + 1;
-                        y = rand.NextDouble() * (size - 2 - 2 * radius) + radius + 1;
+                        x = rand.NextDouble() * (height - 2 - 2 * radius) + radius + 1;
+                        y = rand.NextDouble() * (height - 2 - 2 * radius) + radius + 1;
 
                     } while (!CanCreateBallHere(x, y, radius));
 

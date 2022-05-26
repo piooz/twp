@@ -21,9 +21,25 @@ namespace Data
             this.X = x;
             this.Y = y;
             this.R = r;
-/*            this.VelX = vx;
-            this.VelY = vy;*/
             this.mass = _mass;
+
+            Random ran = new Random();
+
+            if (ran.Next(2) == 0)
+            {
+                VelX = ran.NextDouble() * -1;
+            }
+            else
+            {
+                VelX = ran.NextDouble() * 1;
+            }
+
+
+            if (ran.Next(2) == 0)
+                VelY = Math.Sqrt(1 - (VelX * VelX));
+            else
+                VelY = Math.Sqrt(1 - (VelX * VelX)) * -1;
+
         }
         public double GetX() { return X; }
         public double GetY() { return Y; }
@@ -31,31 +47,14 @@ namespace Data
         public double GetVelY() { return VelY; }
         public double GetR() { return R; }
         public double GetMass() { return mass; }
-        public void SetX(double x) { X = x; }
-        public void SetY(double y) { Y = y; }
+        public void SetMass(double mass ) { this.mass = mass; }
+        public void SetX(double x) { X = x; RaisePropertyChanged(nameof(X)); }
+        public void SetY(double y) { Y = y; RaisePropertyChanged(nameof(Y)); }
         public void SetVX(double vx) { VelX = vx; }
         public void SetVY(double vy) { VelY = vy; }
         public void SetR(int r) { R = r; }
 
 
-        /*      public void simulateMove(int size)
-              {
-
-                  int newx = X + VelX;
-                  int newy = Y + VelY;
-
-                  if (newx > size || newx < 0)
-                  {
-                      VelX *= -1;
-                  }
-                  if (newy > size || newy < 0)
-                  {
-                      VelY *= -1;
-                  }
-
-                  X += VelX;
-                  Y += VelY;
-              }*/
         public void Move()
         {
             X += VelX;
