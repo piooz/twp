@@ -54,7 +54,7 @@ namespace Logic
 
             private void UpdateVelocity(int boardHeight, int boardWidth, double radius, Ball ball)
             {
-                BounceFromBoundaries(ball, DataLayer.GetBoard());
+                BorderCollsion(ball, DataLayer.GetBoard());
                 Ball collided = CheckCollisions(ball);
                 if (collided != null)
                 {
@@ -76,7 +76,7 @@ namespace Logic
 
             }
 
-            private void BounceFromBoundaries(Ball ball, Board board)
+            private void BorderCollsion(Ball ball, Board board)
             {
                 if (!(ball.X >= ball.R && ball.X <= board.Width - ball.R))
                 {

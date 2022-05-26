@@ -13,8 +13,8 @@ namespace TestData
 
             Assert.AreEqual(ball.GetX(), 1);
             Assert.AreEqual(ball.GetY(), 2.3);
-            Assert.AreEqual(ball.GetR(), 3);
-            Assert.AreEqual(ball.GetMass(), 5);
+            Assert.AreEqual(ball.GetR(), 3.6);
+            Assert.AreEqual(ball.GetMass(), 4.1);
 
             ball.SetX(10);
             ball.SetY(10);

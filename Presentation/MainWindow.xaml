@@ -3,40 +3,81 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mw="clr-namespace:ViewModel;assembly=ViewModel"
+        xmlns:cc="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="MainWindow" Height="700" Width="1100" ResizeMode="NoResize">
+
     <Window.DataContext>
-        <mw:MainViewModel/>
+        <cc:MainViewModel/>
     </Window.DataContext>
-    <StackPanel>
-        <TextBox Name="kulki" Text="{Binding InputNum}" Width="150" BorderBrush="Black" BorderThickness="2"/>
-        <Button x:Name="baton"  Command="{Binding StartButtonClick}" Content="START" Width="100"/>
 
-        <Canvas x:Name="board" Height="300" Width="300" Margin="250,10,250,10">
+    <Grid Background="White">
+        <TextBox HorizontalAlignment="Left"
+                Margin="6,80,0,0"
+                TextWrapping="Wrap"
+                Text="{Binding NumberOfBalls, UpdateSourceTrigger=PropertyChanged}"
+                VerticalAlignment="Top"
+                Width="144"
+                Height="48" FontSize="30"/>
+        <Button x:Name="StartButton" Content="start"
+                HorizontalAlignment="Left"
+                Margin="6,172,0,0"
+                VerticalAlignment="Top"
+                RenderTransformOrigin="-0.1,-0.297"
+                Height="56"
+                Width="148"
+                Command="{Binding Start}"
+                FontSize="18"
+                IsEnabled="{Binding StartEnabled}"/>
+        <ItemsControl 
+                ItemsSource="{Binding Ellip}"              
+                Height="{Binding Height}"
+                Width="{Binding Width}"
+                Margin="167,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Background="#FFD22121">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Name="Box"
+                                Background="#EEE"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left"
+                                Value="{Binding Posx}" />
+                    <Setter Property="Canvas.Top"
+                                Value="{Binding Posy}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse 
+                            Height="{Binding Diameter}"
+                            Width="{Binding Diameter}"
+                            Fill="Tomato"
+                            >
 
-            <Rectangle Stroke="Black" Height="300" Width="300"/>
-            <ItemsControl ItemsSource="{Binding Balls}">
+                        <Ellipse.RenderTransform>
+                            <TranslateTransform X="{Binding CenterTransform}" Y="{Binding CenterTransform}" />
+                        </Ellipse.RenderTransform>
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Ellipse Width= "10" Height="10" Fill="Tomato">
-                                <Ellipse.RenderTransform>
-                                    <TranslateTransform X="{Binding Posx}" Y="{Binding Posy}"/>
-                                </Ellipse.RenderTransform>
-                            </Ellipse>
-                        </DataTemplate>
+                    </Ellipse>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Canvas.Left" Value="{Binding Posx}"/>
-                            <Setter Property="Canvas.Top" Value="{Binding Posy}"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                </ItemsControl>
-
-        </Canvas>
-    </StackPanel>
+        <Button Content="stop"
+            HorizontalAlignment="Left"
+            Margin="6,247,0,0"
+            VerticalAlignment="Top"
+            RenderTransformOrigin="-0.093,-0.064"
+            Height="53"
+            Width="148"
+            Command="{Binding Stop}"
+            FontSize="18"
+            />
+    </Grid>
 
 </Window>

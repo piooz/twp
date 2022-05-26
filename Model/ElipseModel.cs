@@ -9,20 +9,35 @@ namespace Model
 {
     public class ElipseModel : INotifyPropertyChanged
     {
-        public int Radius { get; set; }
-        public int posx;
-        public int posy;
+        public double radius;
+        public double posx;
+        public double posy;
+
+        public double CenterTransform { get => -1 * Radius; }
+        public double Diameter { get => 2 * Radius; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ElipseModel(Ball ball)
+
+        public ElipseModel(BallConnector ball)
         {
+            ball.PropertyChanged += BallPropertyChanged;
             this.Radius = ball.R;
             this.posx = ball.X;
             this.posy = ball.Y;
         }
 
-        public int Posx
+        public double Radius
+        {
+            get => radius;
+            set
+            {
+                radius = value;
+                RaisePropertyChanged(nameof(Radius));
+            }
+
+        }
+        public double Posx
         {
             get
             {
@@ -34,7 +49,7 @@ namespace Model
                RaisePropertyChanged(nameof(Posx));
             }
         }
-        public int Posy
+        public double Posy
         {
             get
             {
@@ -52,6 +67,12 @@ namespace Model
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void BallPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            BallConnector b = (BallConnector)sender;
 
+            Posx = b.X;
+            Posy = b.Y;
+        }
     }
 }

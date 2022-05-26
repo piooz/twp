@@ -21,7 +21,6 @@ namespace Data
             _height = h;
         }
 
-
         public int Width { get => _width; }
         public int Height { get => _height; }
 

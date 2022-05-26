@@ -2,56 +2,110 @@
 using Model;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        //public ICommand ExiStopButtonClick { get; set; }
-        public ICommand StartButtonClick { get; set; }
 
-        public MainViewModel() : this(ModelApi.CreateLayer()) { }
-        public MainViewModel(ModelApi modelAbstractApi)
+        private ModelApi MyModel { get; set; }
+
+        private int _numberOfBalls;
+        private int _height = 600;
+        private int _width = 900;
+        private string _startButton;
+        private bool _enabled = true;
+
+        public MainViewModel()
         {
-            ModelLayer = modelAbstractApi;
-            StartButtonClick = new RelayCommand(() => ClickHandler());
-            Balls = modelAbstractApi.GetModels();
+            MyModel = ModelApi.CreateLayer();
+            Start = new RelayCommand(() => start());
+            Stop = new RelayCommand(() => stop());
+            _numberOfBalls = 7;
+            _startButton = "Start";
         }
 
-        //liczba kulek
-        public string InputNum
-        {  
+        public string StartButton
+        {
+            get => _startButton;
             set
             {
-                number = value;
-                RaisePropertyChanged(nameof(number));
+                _startButton = value;
+                RaisePropertyChanged("StartButton");
             }
-            get => number;
+
         }
 
-        public int InputBox()
+        public int Width
         {
-            int count;
-            if (Int32.TryParse(InputNum, out count))
+            get => _width;
+            set
             {
-                count = Int32.Parse(InputNum);
-                return count;
+                _width = value;
+                RaisePropertyChanged("Width");
             }
-            return 0;
+
         }
 
 
-        private void ClickHandler()
+        public int Height
         {
-            //doing something usefull
-            ModelLayer.addBalls(InputBox());
-            ModelLayer.StartMoving();
-            //dodac zmiane pozycji
+            get => _height;
+            set
+            {
+                _height = value;
+                RaisePropertyChanged("Height");
+            }
+        }
+
+        public ObservableCollection<ElipseModel> Ellip
+        {
+            get => MyModel.Ellipses;
+            set => MyModel.Ellipses = value;
+        }
+
+        public string NumberOfBalls
+        {
+            get => _numberOfBalls.ToString();
+            set
+            {
+                if (int.TryParse(value, out int n) && n != 0)
+                    _numberOfBalls = Math.Abs(n);
+                RaisePropertyChanged(nameof(NumberOfBalls));
+            }
+        }
+
+        public bool StartEnabled
+        {
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                RaisePropertyChanged(nameof(StartEnabled));
+            }
+        }
+
+        public ICommand Start { get; set; }
+        public ICommand Stop { get; set; }
+
+        private void start()
+        {
+            MyModel.GenerateBallsRepresentative(Height, Width, _numberOfBalls, 30);
+            StartButton = "Restart";
+            StartEnabled = false;
 
         }
-        private ModelApi ModelLayer;
-        private string number;
-        public ObservableCollection<ElipseModel> Balls { get; set; }
+
+        private void stop()
+        {
+            MyModel.StopSimulation();
+            StartEnabled = true;
+        }
+
+
+
     }
 
 }

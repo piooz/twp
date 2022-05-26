@@ -8,7 +8,7 @@ namespace ViewModel
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
-        private ModelApi modelApi;
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 
