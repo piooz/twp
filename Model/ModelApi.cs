@@ -5,61 +5,59 @@ using Logic;
 
 namespace Model
 {
-    public  abstract class ModelApi
+    public abstract class ModelApi
     {
-        private logic logic;
+        private logic Logic;
         public static ModelApi CreateLayer(Logic.logic Lapi = default(logic))
         {
             return new Model(Lapi == null ? logic.CreateLayer() : Lapi);
         }
 
-        public abstract ObservableCollection<ElipseModel> GetModels();
+        public abstract void GenerateBallsRepresentative(int height, int width, int numberOfBalls, int radiusOfBalls);
+        public abstract void StartSimulation();
+        public abstract void StopSimulation();
 
-        public abstract void StartMoving();
-        public abstract void StopMoving();
+        public ObservableCollection<ElipseModel> Ellipses
+        {
+            get => ellipses;
+            set => ellipses = value;
+        }
 
-        //public abstract void Start();
-        public abstract int getBoardSize();
-        public abstract void addBalls(int count);
+        private ObservableCollection<ElipseModel> ellipses = new ObservableCollection<ElipseModel>();
 
         // implementacja Api
         private class Model : ModelApi
         {
-            private ObservableCollection<ElipseModel> Elipses = new ObservableCollection<ElipseModel>();
-
-            public override ObservableCollection<ElipseModel> GetModels()
-            {
-                return Elipses;
-            }
             public Model(logic logika)
             {
-                logic = logika;
+                Logic = logika;
             }
 
-            override public void StartMoving()
-            {
-                logic.StartMovingBalls();
-            }
+            private ObservableCollection<ElipseModel> Elipses = new ObservableCollection<ElipseModel>();
 
-            public override void StopMoving()
-            {
-                logic.StopMovingBalls();
-            }
 
-            override public int getBoardSize()
+            public override void GenerateBallsRepresentative(int height, int width, int numberOfBalls, int radiusOfBalls)
             {
-                return logic.BoardSize();
-            }
+                Logic.DestroyThreads();
+                Logic.CreateBoard(height, width, numberOfBalls, radiusOfBalls);
 
-            public override void addBalls(int count)
-            {
-                for( int i = 0; i< count; i++ )
+                ellipses.Clear();
+
+                foreach (BallConnector bc in Logic.GetBalls())
                 {
-                    logic.AddBall();
-                    Elipses.Add(new ElipseModel(logic.AddBall()));
-
+                    ellipses.Add(new ElipseModel(bc));
                 }
 
+                StartSimulation();
+            }
+            public override void StartSimulation()
+            {
+                Logic.StartMovingBalls();
+            }
+
+            public override void StopSimulation()
+            {
+                Logic.DestroyThreads();
             }
 
         }
