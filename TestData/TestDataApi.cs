@@ -24,7 +24,7 @@ namespace TestData
 
             foreach (Ball ball in balls)
             {
-                Assert.AreEqual(ball.GetR(), 3);
+                Assert.AreEqual(ball.R, 3);
             }
 
         }

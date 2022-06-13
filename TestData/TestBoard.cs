@@ -11,8 +11,8 @@ namespace TestData
         {
 
             Board board = new Board(1000, 800);
-            Ball ball = new Ball(10, 20, 10, 10);
-            Ball ball2 = new Ball(200, 200, 8.4, 9.2);
+            Ball ball = new Ball(10, 20, 10, 10,1);
+            Ball ball2 = new Ball(200, 200, 8.4, 9.2,2);
 
             Assert.AreEqual(1000, board.Height);
             Assert.AreEqual(800, board.Width);

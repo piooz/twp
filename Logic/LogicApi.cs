@@ -47,30 +47,37 @@ namespace Logic
                 Ball b = (Ball)sender;
                 if (e.PropertyName == "Position")
                 {
-                    UpdateVelocity(DataLayer.GetBoard().Height, DataLayer.GetBoard().Width, b.R, b);
+                    UpdateVelocity(b);
                 }
 
             }
 
-            private void UpdateVelocity(int boardHeight, int boardWidth, double radius, Ball ball)
+            private void UpdateVelocity(Ball ball)
             {
                 BorderCollsion(ball, DataLayer.GetBoard());
                 Ball collided = CheckCollisions(ball);
                 if (collided != null)
                 {
-                    double newX1, newX2, newY1, newY2;
+                    double XDiff = ball.X - collided.X;
+                    double YDiff = ball.Y - collided.Y;
 
-                    newX1 = (ball.VelX * (ball.mass - collided.mass) / (ball.mass + collided.mass) + (2 * collided.mass * collided.VelX) / (ball.mass + collided.mass));
-                    newY1 = (ball.VelY * (ball.mass - collided.mass) / (ball.mass + collided.mass) + (2 * collided.mass* collided.VelY) / (ball.mass + collided.mass));
 
-                    newX2 = (collided.VelX * (collided.mass - ball.mass) / (ball.mass + collided.mass) + (2 * ball.mass * ball.VelX) / (ball.mass + collided.mass));
-                    newY2 = (collided.VelY * (collided.mass - ball.mass) / (ball.mass + collided.mass) + (2 * ball.mass * ball.VelY) / (ball.mass + collided.mass));
+                    if (XDiff * (collided.VelX - ball.VelX) + YDiff * (collided.VelY - ball.VelY) > 0)
+                    {
+                        double V1X = ball.VelX;
+                        double V1Y = ball.VelY;
 
-                    ball.VelX = newX1;
-                    ball.VelY = newY1;
+                        double tmp = 2 * (XDiff * (V1X - collided.VelX) +
+                                          YDiff * (V1Y - collided.VelY)) /
+                                         (XDiff * XDiff + YDiff * YDiff) /
+                                         (ball.mass + collided.mass);
 
-                    collided.VelX = newX2;
-                    collided.VelY = newY2;
+                        ball.VelX -= collided.mass * XDiff * tmp;
+                        ball.VelY -= collided.mass * YDiff * tmp;
+
+                        collided.VelX += ball.mass * XDiff * tmp;
+                        collided.VelY += ball.mass * YDiff * tmp;
+                    }
 
                 }
 

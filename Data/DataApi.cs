@@ -15,7 +15,7 @@ namespace Data
         public abstract void CreateBoard(int height, int width, int ballsAmount, int radius);
         public abstract bool CanCreateBallHere(double x, double y, double radius);
 
-        public abstract void AddBall(double x, double y, double radius, double mass);
+        public abstract void AddBall(double x, double y, double radius, double mass, int id);
 
         public abstract void SimulateMoving();
 
@@ -42,6 +42,8 @@ namespace Data
             private bool moving = false;
 
             private object _lock = new object();
+            Logger logger;
+
 
             public override void CreateBoard(int height, int width, int ballsAmount, int radius )
             {
@@ -63,7 +65,7 @@ namespace Data
 
                     } while (!CanCreateBallHere(x, y, radius));
 
-                    AddBall(x, y, radius, mass);
+                    AddBall(x, y, radius, mass, i);
 
                 }
 
@@ -81,9 +83,9 @@ namespace Data
                 return true;
             }
 
-            public override void AddBall(double x, double y, double radius, double mass)
+            public override void AddBall(double x, double y, double radius, double mass,int id)
             {
-                Ball ball = new Ball(x, y, radius, mass);
+                Ball ball = new Ball(x, y, radius, mass, id);
                 board.AddBall(ball);
 
                 Thread t = new Thread(() =>
@@ -123,11 +125,17 @@ namespace Data
                 {
                     thread.Start();
                 }
+
+                logger = new Logger(GetBalls());
             }
 
             public override void StopMoving()
             {
                 moving = false;
+                if (logger != null)
+                {
+                    logger.StopLogging();
+                }
             }
         }
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
+
 
 namespace Data
 {
@@ -15,9 +17,11 @@ namespace Data
         public double VelX;
         public double VelY;
         public double mass;
+        private int _id;
 
-        public Ball(double x, double y, double r, double _mass)
+        public Ball(double x, double y, double r, double _mass, int id)
         {
+            this._id = id;
             this.X = x;
             this.Y = y;
             this.R = r;
@@ -45,7 +49,10 @@ namespace Data
         public double GetY() { return Y; }
         public double GetVelX() { return VelX; }
         public double GetVelY() { return VelY; }
+
+        
         public double GetR() { return R; }
+ 
         public double GetMass() { return mass; }
         public void SetMass(double mass ) { this.mass = mass; }
         public void SetX(double x) { X = x; RaisePropertyChanged(nameof(X)); }
@@ -54,6 +61,11 @@ namespace Data
         public void SetVY(double vy) { VelY = vy; }
         public void SetR(int r) { R = r; }
 
+
+        public int ID
+        {
+            get { return _id; }
+        }
 
         public void Move()
         {

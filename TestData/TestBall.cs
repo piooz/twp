@@ -9,7 +9,7 @@ namespace TestData
         [TestMethod]
         public void TestMethod1()
         {
-            Ball ball = new Ball(1, 2.3, 3.6, 4.1);
+            Ball ball = new Ball(1, 2.3, 3.6, 4.1,1);
 
             Assert.AreEqual(ball.GetX(), 1);
             Assert.AreEqual(ball.GetY(), 2.3);
