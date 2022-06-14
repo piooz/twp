@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
-using Data;
+
 
 namespace TestLogic
 {
@@ -11,8 +11,8 @@ namespace TestLogic
         [TestMethod]
         public void LogicLayerTests()
         {
-            DataApi dataApi = DataApi.Create();
-            logic LogicAPI = logic.CreateLayer(dataApi);
+
+            logic LogicAPI = logic.CreateLayer();
 
             LogicAPI.CreateBoard(200, 100, 3, 2);
 
