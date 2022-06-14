@@ -9,10 +9,10 @@ namespace Data
 {
     internal class Logger
     {
-        private static List<Ball> balls;
+        private static List<IBall> balls;
         private bool isLogging = true;
         private Stopwatch sw;
-        internal Logger(List<Ball> BallList)
+        internal Logger(List<IBall> BallList)
         {
             balls = BallList;
 

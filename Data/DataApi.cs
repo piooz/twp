@@ -23,7 +23,7 @@ namespace Data
 
         public abstract Board GetBoard();
 
-        public abstract List<Ball> GetBalls();
+        public abstract List<IBall> GetBalls();
 
 
 
@@ -74,7 +74,7 @@ namespace Data
 
             public override bool CanCreateBallHere(double x, double y, double radius)
             {
-                foreach (Ball other in GetBalls())
+                foreach (IBall other in GetBalls())
                 {
                     double distance = Math.Sqrt((x - other.X) * (x - other.X) + (y - other.Y) * (y - other.Y));
                     if (distance <= radius + other.R + 1)
@@ -108,7 +108,7 @@ namespace Data
                 threads.Add(t);
             }
 
-            public override List<Ball> GetBalls()
+            public override List<IBall> GetBalls()
             {
                 return board.GetBalls();
             }

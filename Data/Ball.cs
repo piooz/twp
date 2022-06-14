@@ -7,65 +7,42 @@ using System.Text.Json.Serialization;
 
 namespace Data
 {
-    public class Ball : INotifyPropertyChanged
+    public class Ball : INotifyPropertyChanged, IBall
     {
+        public Ball(double x, double y, double radius, double mass, int id)
+        {
+            _id = id;
+            _x = x;
+            _y = y;
+            _r = radius;
+            _m = mass;
 
-        public double X;
-        public double Y;
-        public double R;
+            Random r = new Random();
 
-        public double VelX;
-        public double VelY;
-        public double mass;
+            if (r.Next(2) == 0)
+            {
+                _velX = r.NextDouble() * -1;
+            }
+            else
+            {
+                _velX = r.NextDouble() * 1;
+            }
+
+
+            if (r.Next(2) == 0)
+                _velY = Math.Sqrt(1 - (_velX * _velX));
+            else
+                _velY = Math.Sqrt(1 - (_velX * _velX)) * -1;
+
+        }
+
         private int _id;
-
-        public Ball(double x, double y, double r, double _mass, int id)
-        {
-            this._id = id;
-            this.X = x;
-            this.Y = y;
-            this.R = r;
-            this.mass = _mass;
-
-            Random ran = new Random();
-
-            if (ran.Next(2) == 0)
-            {
-                VelX = ran.NextDouble() * -1;
-            }
-            else
-            {
-                VelX = ran.NextDouble() * 1;
-            }
-
-
-            if (ran.Next(2) == 0)
-                VelY = Math.Sqrt(1 - (VelX * VelX));
-            else
-                VelY = Math.Sqrt(1 - (VelX * VelX)) * -1;
-
-        }
-        public double GetX() { return X; }
-        public double GetY() { return Y; }
-        public double GetVelX() { return VelX; }
-        public double GetVelY() { return VelY; }
-
-        
-        public double GetR() { return R; }
- 
-        public double GetMass() { return mass; }
-        public void SetMass(double mass ) { this.mass = mass; }
-        public void SetX(double x) { X = x; RaisePropertyChanged(nameof(X)); }
-        public void SetY(double y) { Y = y; RaisePropertyChanged(nameof(Y)); }
-        public void SetVX(double vx) { VelX = vx; }
-        public void SetVY(double vy) { VelY = vy; }
-        public void SetR(int r) { R = r; }
-
-
-        public int ID
-        {
-            get { return _id; }
-        }
+        private double _x;
+        private double _y;
+        private double _r;
+        private double _m;
+        private double _velX;
+        private double _velY;
 
         public void Move()
         {
@@ -73,11 +50,85 @@ namespace Data
             Y += VelY;
             RaisePropertyChanged("Position");
         }
+
+        public int ID
+        {
+            get { return _id; }
+        }
+        public double X
+        {
+            get => _x;
+            set
+            {
+                _x = value;
+                RaisePropertyChanged("X");
+            }
+        }
+
+        public double Y
+        {
+            get => _y;
+            set
+            {
+                _y = value;
+                RaisePropertyChanged("Y");
+            }
+
+        }
+        [JsonIgnore]
+        public double R
+        {
+            get => _r;
+            set
+            {
+                if (value > 0)
+                {
+                    _r = value;
+                }
+
+                else
+                {
+                    throw new ArgumentException();
+                }
+
+            }
+        }
+        [JsonIgnore]
+        public double mass
+        {
+            get => _m;
+            set
+            {
+                _m = value;
+            }
+        }
+
+        public double VelX
+        {
+            get => _velX;
+            set
+            {
+                _velX = value;
+            }
+        }
+
+        public double VelY
+        {
+            get => _velY;
+            set
+            {
+                _velY = value;
+            }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void RaisePropertyChanged(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
 
     }
 }
