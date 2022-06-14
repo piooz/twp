@@ -11,25 +11,25 @@ namespace TestData
         {
             Ball ball = new Ball(1, 2.3, 3.6, 4.1,1);
 
-            Assert.AreEqual(ball.GetX(), 1);
-            Assert.AreEqual(ball.GetY(), 2.3);
-            Assert.AreEqual(ball.GetR(), 3.6);
-            Assert.AreEqual(ball.GetMass(), 4.1);
+            Assert.AreEqual(ball.X, 1);
+            Assert.AreEqual(ball.Y, 2.3);
+            Assert.AreEqual(ball.R, 3.6);
+            Assert.AreEqual(ball.mass, 4.1);
 
-            ball.SetX(10);
-            ball.SetY(10);
-            ball.SetR(2);
-            ball.SetMass(2.2);
+            ball.X = (10);
+            ball.Y = (10);
+            ball.R = (2);
+            ball.mass = (2.2);
 
-            Assert.AreEqual(ball.GetX(), 10);
-            Assert.AreEqual(ball.GetY(), 10);
-            Assert.AreEqual(ball.GetR(), 2);
-            Assert.AreEqual(ball.GetMass(), 2.2);
+            Assert.AreEqual(ball.X, 10);
+            Assert.AreEqual(ball.Y, 10);
+            Assert.AreEqual(ball.R, 2);
+            Assert.AreEqual(ball.mass, 2.2);
 
             ball.Move();
 
-            Assert.IsTrue(ball.X == 10 + ball.GetVelX());
-            Assert.IsTrue(ball.Y == 10 + ball.GetVelY());
+            Assert.IsTrue(ball.X == 10 + ball.VelX);
+            Assert.IsTrue(ball.Y == 10 + ball.VelY);
 
 
         }

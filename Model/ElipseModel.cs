@@ -7,11 +7,11 @@ using System.Runtime.CompilerServices;
 
 namespace Model
 {
-    public class ElipseModel : INotifyPropertyChanged
+    public class ElipseModel : IElipse, INotifyPropertyChanged
     {
-        public double radius;
-        public double posx;
-        public double posy;
+        //public double radius;
+        //public double posx;
+        //public double posy;
 
         public double CenterTransform { get => -1 * Radius; }
         public double Diameter { get => 2 * Radius; }

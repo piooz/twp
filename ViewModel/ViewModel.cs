@@ -60,7 +60,7 @@ namespace ViewModel
             }
         }
 
-        public ObservableCollection<ElipseModel> Ellip
+        public ObservableCollection<IElipse> Ellip
         {
             get => MyModel.Ellipses;
             set => MyModel.Ellipses = value;

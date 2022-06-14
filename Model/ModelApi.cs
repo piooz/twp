@@ -17,13 +17,13 @@ namespace Model
         public abstract void StartSimulation();
         public abstract void StopSimulation();
 
-        public ObservableCollection<ElipseModel> Ellipses
+        public ObservableCollection<IElipse> Ellipses
         {
             get => ellipses;
             set => ellipses = value;
         }
 
-        private ObservableCollection<ElipseModel> ellipses = new ObservableCollection<ElipseModel>();
+        private ObservableCollection<IElipse> ellipses = new ObservableCollection<IElipse>();
 
         // implementacja Api
         private class Model : ModelApi
@@ -33,7 +33,7 @@ namespace Model
                 Logic = logika;
             }
 
-            private ObservableCollection<ElipseModel> Elipses = new ObservableCollection<ElipseModel>();
+            private ObservableCollection<IElipse> Elipses = new ObservableCollection<IElipse>();
 
 
             public override void GenerateBallsRepresentative(int height, int width, int numberOfBalls, int radiusOfBalls)
